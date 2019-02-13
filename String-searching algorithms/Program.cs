@@ -62,4 +62,62 @@ namespace String_searching_algorithms
             }
         }
     }
+
+    static class KnuthMorrisPrattAlgorithm
+    {
+        public static int[] ComputePrefixFunction(string str)
+        {
+            var pi = new int[str.Length]; // значения префикс-функции
+                                          // индекс вектора соответствует номеру последнего символа аргумента
+            pi[0] = 0; // для префикса из нуля и одного символа функция равна нулю
+            int j = 0;
+            for (int i = 1; i < str.Length;)
+            {
+                if (str[i] == str[j])
+                {
+                    pi[i] = ++j;
+                    i++;
+                }
+                else if (j == 0)
+                {
+                    pi[i] = 0;
+                    i++;
+                }
+                else
+                {
+                    j = pi[j - 1];
+                }
+
+
+            }
+            return pi;
+        }
+
+        public static int FindFirstEntry(string haystack, string needle)
+        {
+            var pi = ComputePrefixFunction(needle);
+            int i = 0, j = 0;
+            for (; i < haystack.Length;)
+            {
+                if (haystack[i] == needle[j])
+                {
+                    i++;
+                    j++;
+                    if (j == needle.Length)
+                    {
+                        return (i - j + 1);
+                    }
+                }
+                else if (j == 0)
+                {
+                    i++;
+                }
+                else
+                {
+                    j = pi[j - 1];
+                }
+            }
+            return -1;
+        }
+    }
 }
