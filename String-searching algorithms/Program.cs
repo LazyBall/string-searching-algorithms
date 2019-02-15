@@ -8,8 +8,9 @@ namespace String_searching_algorithms
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
+
         }
     }
 
@@ -28,7 +29,7 @@ namespace String_searching_algorithms
                         break;
                     }
                 }
-                if (j == (needle.Length - 1))
+                if (j == needle.Length)
                 {
                     return i;
                 }
@@ -50,7 +51,7 @@ namespace String_searching_algorithms
                         break;
                     }
                 }
-                if (j == (needle.Length - 1))
+                if (j == needle.Length)
                 {
                     found = true;
                     yield return i;
@@ -68,30 +69,23 @@ namespace String_searching_algorithms
         public static int[] ComputePrefixFunction(string str)
         {
             var pi = new int[str.Length]; // значения префикс-функции
-                                          // индекс вектора соответствует номеру последнего символа аргумента
             pi[0] = 0; // для префикса из нуля и одного символа функция равна нулю
             int j = 0;
-            for (int i = 1; i < str.Length;)
+            for (int i = 1; i < str.Length; i++)
             {
-                if (str[i] == str[j])
-                {
-                    pi[i] = ++j;
-                    i++;
-                }
-                else if (j == 0)
-                {
-                    pi[i] = 0;
-                    i++;
-                }
-                else
+                while ((j > 0) && (str[i] != str[j]))
                 {
                     j = pi[j - 1];
                 }
-
-
+                if (str[i] == str[j])
+                {
+                    j++;
+                }
+                pi[i] = j;
             }
             return pi;
         }
+
 
         public static int FindFirstEntry(string haystack, string needle)
         {
@@ -118,6 +112,34 @@ namespace String_searching_algorithms
                 }
             }
             return -1;
+        }
+
+        public static IEnumerable<int> FindAllEntries(string haystack, string needle)
+        {
+            var pi = ComputePrefixFunction(needle);
+            bool found = false;
+            int j = 0;
+            for (int i = 0; i < haystack.Length; i++)
+            {
+                while (j > 0 && haystack[i] != needle[j])
+                {
+                    j = pi[j - 1];
+                }
+                if (haystack[i] == needle[j])
+                {
+                    j++;
+                    if (j == needle.Length)
+                    {
+                        yield return (i - j + 1);
+                        j = pi[j - 1];
+                        found = true;
+                    }
+                }
+            }
+            if (!found)
+            {
+                yield return -1;
+            }
         }
     }
 }
