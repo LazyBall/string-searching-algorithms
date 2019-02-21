@@ -11,16 +11,7 @@ namespace String_searching_algorithms
     {
         static void Main()
         {
-            var str1 = "ABCABD#ABCABCAABCABD";
-            foreach(var val in Func1(str1))
-            {
-                Console.Write($"{val}| ");
-            }
-            Console.WriteLine();
-            foreach (var val in Func2(str1))
-            {
-                Console.Write($"{val}| ");
-            }
+
             //var watch = new Stopwatch();
             //for (int i = 1; i < 6; i++)
             //{
@@ -38,43 +29,7 @@ namespace String_searching_algorithms
             //}
 
         }
-
-        static int[] Func1(string str)
-        {
-            var pi = new int[str.Length + 1]; // значения префикс-функции + -1 в начале
-            int i = 0;
-            int j = pi[0] = -1; // благодаря -1 можно убрать лишнее условие из стандартной функции и КМП
-            while (i < str.Length)
-            {
-                while ((j > -1) && (str[i] != str[j]))
-                {
-                    j = pi[j];
-                }
-                pi[++i] = ++j;
-            }
-            return pi;
-        }
-
-        static int[] Func2(string str)
-        {
-            var pi = new int[str.Length]; // значения префикс-функции
-            pi[0] = 0; // для префикса из нуля и одного символа функция равна нулю
-            int j = 0;
-            for (int i = 1; i < str.Length; i++)
-            {
-                while ((j > 0) && (str[i] != str[j]))
-                {
-                    j = pi[j - 1];
-                }
-                if (str[i] == str[j])
-                {
-                    j++;
-                }
-                pi[i] = j;
-            }
-            return pi;
-        }
-
+       
         static string DoRandomString(int length)
         {
             var strBuilder = new StringBuilder(length);
@@ -87,7 +42,7 @@ namespace String_searching_algorithms
         }
     }
 
-  
+
 
     static class NaiveAlgorithm
     {
@@ -99,7 +54,7 @@ namespace String_searching_algorithms
                 int j;
                 for (j = 0; j < needle.Length; j++)
                 {
-                    if (haystack[i + j] != needle[j])
+                    if (needle[j] != haystack[i + j])
                     {
                         break;
                     }
@@ -121,7 +76,7 @@ namespace String_searching_algorithms
                 int j;
                 for (j = 0; j < needle.Length; j++)
                 {
-                    if (haystack[i + j] != needle[j])
+                    if (needle[j] != haystack[i + j])
                     {
                         break;
                     }
@@ -148,11 +103,11 @@ namespace String_searching_algorithms
             int j = 0;
             for (int i = 1; i < str.Length; i++)
             {
-                while ((j > 0) && (str[i] != str[j]))
+                while ((j > 0) && (str[j] != str[i]))
                 {
                     j = pi[j - 1];
                 }
-                if (str[i] == str[j])
+                if (str[j] == str[i])
                 {
                     j++;
                 }
@@ -168,7 +123,7 @@ namespace String_searching_algorithms
             int i = 0, j = 0;
             for (; i < haystack.Length;)
             {
-                if (haystack[i] == needle[j])
+                if (needle[j] == haystack[i])
                 {
                     i++;
                     j++;
@@ -196,11 +151,11 @@ namespace String_searching_algorithms
             int j = 0;
             for (int i = 0; i < haystack.Length; i++)
             {
-                while ((j > 0) && (haystack[i] != needle[j]))
+                while ((j > 0) && (needle[j] != haystack[i]))
                 {
                     j = pi[j - 1];
                 }
-                if (haystack[i] == needle[j])
+                if (needle[j] == haystack[i])
                 {
                     j++;
                     if (j == needle.Length)
