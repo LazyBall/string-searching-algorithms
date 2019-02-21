@@ -196,7 +196,7 @@ namespace String_searching_algorithms
             int j = 0;
             for (int i = 0; i < haystack.Length; i++)
             {
-                while (j > 0 && haystack[i] != needle[j])
+                while ((j > 0) && (haystack[i] != needle[j]))
                 {
                     j = pi[j - 1];
                 }
