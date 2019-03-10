@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Linq;
 
 namespace String_searching_algorithms
 {
@@ -109,9 +110,37 @@ namespace String_searching_algorithms
         }
     }
 
+    static class PrefixFunction
+    {
+        public static int[] Compute(string str)
+        {
+            var pi = new int[str.Length]; // значения префикс-функции
+            pi[0] = 0; // для префикса из нуля и одного символа функция равна нулю
+            int j = 0;
+
+            for (int i = 1; i < str.Length; i++)
+            {
+
+                while ((j > 0) && (str[j] != str[i]))
+                {
+                    j = pi[j - 1];
+                }
+
+                if (str[j] == str[i])
+                {
+                    j++;
+                }
+                pi[i] = j;
+            }
+
+            return pi;
+        }
+        
+    }
+
     static class KnuthMorrisPrattAlgorithm
     {
-        private static int[] ComputePrefixFunction(string str)
+        public static int[] ComputePrefixFunction(string str)
         {
             var pi = new int[str.Length]; // значения префикс-функции
             pi[0] = 0; // для префикса из нуля и одного символа функция равна нулю
@@ -199,6 +228,92 @@ namespace String_searching_algorithms
             {
                 yield return -1;
             }
+        }
+    }
+
+    static class BoyerMooreAlgorithm
+    {
+        //Эвристика стоп-символа
+        private static IReadOnlyDictionary<char,int> ComputeLastOccurrenceFunction(string str)
+        {
+            //Если алфавит маленький ASCII (256 символов) то можно сделать массив
+            // var lambda=new int[256];
+            // и для каждого символа lambda[(byte)symbol]=i; , где i-самая правая позиция в строке
+            // кроме последнего символа (это изменение поможет в алгоритме Хорспула)
+            //В случае большого алфавита лучше использовать Dictionary
+            var lambda = new Dictionary<char, int>();
+            int m = str.Length;
+            for (int i = 0; i < m - 1; i++)
+            {
+                char symbol = str[i];
+                if (lambda.ContainsKey(symbol))
+                {
+                    lambda[symbol] = i;
+                }
+                else
+                {
+                    lambda.Add(symbol, i);
+                }
+            }
+
+            return lambda;
+        }
+
+        //Эвристика безопасного суффикса
+        private static int[] ComputeGoodSuffixFunction(string str)
+        {
+            var pi = KnuthMorrisPrattAlgorithm.ComputePrefixFunction(str);
+            string reverseStr = str.Reverse().ToString();
+            var piRev = KnuthMorrisPrattAlgorithm.ComputePrefixFunction(reverseStr);
+            int m = str.Length;
+            // В массивах pi и piRev относительно Кормена индексы начинаются с нуля
+            // при этом в gamma нумерация идет как и в книге
+
+            int[] gamma = new int[m + 1];
+
+            for (int j = 0; j < m + 1; j++)
+            {
+                gamma[j] = m - pi[m - 1];
+            }
+
+            for (int l = 1; l < m + 1; l++)
+            {
+                int j = m - piRev[l - 1];
+                if (gamma[j] > l - piRev[l - 1])
+                {
+                    gamma[j] = l - piRev[l - 1];
+                }
+            }
+
+            return gamma;
+        }
+
+        public static int FindFirstEntry(string needle, string haystack)
+        {
+            int n = haystack.Length;
+            int m = needle.Length;
+            var lambda = ComputeLastOccurrenceFunction(needle);
+            var gamma = ComputeGoodSuffixFunction(needle);
+            int s = 0;
+            while(s<haystack.Length-needle.Length)
+            {
+                int j = m - 1;
+                while(j>0 && needle[j]==haystack[s+j])
+                {
+                    j--;
+                }
+                if (j == 0)
+                {
+                    return s;
+                    s += gamma[0];
+                }
+                else
+                {
+                    lambda.TryGetValue(haystack[s + j], out int value);
+                    s += Math.Max(gamma[j + 1], value);
+                }
+            }
+            return -1;
         }
     }
 }
