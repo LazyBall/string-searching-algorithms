@@ -210,7 +210,6 @@ namespace String_searching_algorithms
             // и для каждого символа lambda[(byte)symbol]=i; , где i-самая правая позиция в строке
             // кроме последнего символа (это изменение поможет в алгоритме Хорспула)
             //В случае большого алфавита лучше использовать Dictionary
-            //В lambda нумерация символов идёт с единицы
             var lambda = new Dictionary<char, int>();
             int m = str.Length - 1;
 
@@ -219,11 +218,11 @@ namespace String_searching_algorithms
                 char symbol = str[i];
                 if (lambda.ContainsKey(symbol))
                 {
-                    lambda[symbol] = i + 1;
+                    lambda[symbol] = i;
                 }
                 else
                 {
-                    lambda.Add(symbol, i + 1);
+                    lambda.Add(symbol, i);
                 }
             }
 
@@ -292,9 +291,8 @@ namespace String_searching_algorithms
                 }
                 else
                 {
-                    lambda.TryGetValue(haystack[s + j], out int value);
-                    value--;
-                    s += Math.Max(gamma[j + 1], j - value);
+                    int position = (lambda.TryGetValue(haystack[s + j], out int value)) ? value : (-1);
+                    s += Math.Max(gamma[j + 1], j - position);
                 }
             }
 
