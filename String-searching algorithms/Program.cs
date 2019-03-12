@@ -233,13 +233,11 @@ namespace String_searching_algorithms
         private static int[] ComputeGoodSuffixFunction(string str)
         {
             var pi = PrefixFunction.Compute(str);
-            string reverseStr = ReverseString(str);
-            var piRev = PrefixFunction.Compute(reverseStr);
+            var piRev = PrefixFunction.Compute(ReverseString(str));
             int m = str.Length;
+            int[] gamma = new int[m + 1];
             // В массивах pi и piRev относительно Кормена индексы начинаются с нуля
             // при этом в gamma нумерация идет как и в книге
-
-            int[] gamma = new int[m + 1];
 
             for (int j = 0; j < m + 1; j++)
             {
