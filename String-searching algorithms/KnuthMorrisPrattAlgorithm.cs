@@ -2,6 +2,9 @@
 
 namespace StringSearchingAlgorithms
 {
+    /// <summary>
+    /// Алгоритм Кнута — Морриса — Пратта (КМП-алгоритм).
+    /// </summary>
     public static class KnuthMorrisPrattAlgorithm
     {
         /// <summary>
@@ -23,7 +26,14 @@ namespace StringSearchingAlgorithms
             return -1;
         }
 
-
+        ///  <summary>
+        ///  Возвращает все вхождения образца в строку, в которой осуществляется поиск.
+        ///  </summary>
+        ///  <returns>
+        ///  Индекс первого вхождения или -1, если вхождение не найдено.
+        ///  </returns>
+        ///  <param name = "needle" > Строка, вхождения которой нужно найти.</param>
+        ///  <param name = "haystack" > Строка, в которой осуществляется поиск.</param>
         public static IEnumerable<int> FindAllEntries(string needle, string haystack)
         {
             var pi = PrefixFunction.Compute(needle);

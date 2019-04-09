@@ -9,7 +9,7 @@ namespace Console_App
     {
         static void Main()
         {
-            int n = 200000000, l = 50;
+            int n = 200000000, l = 10;
             var haystack = DoRandomString(n);
             var needle = DoRandomString(l);
 

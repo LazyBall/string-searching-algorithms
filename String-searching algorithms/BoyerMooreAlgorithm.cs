@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace StringSearchingAlgorithms
 {
+    /// <summary>
+    /// Алгоритм поиска строки Бойера — Мура.
+    /// </summary>
     public static class BoyerMooreAlgorithm
     {
         //Эвристика стоп-символа
@@ -59,6 +62,14 @@ namespace StringSearchingAlgorithms
             return gamma;
         }
 
+        /// <summary>
+        /// Ищет первое вхождение образца в данной строке.
+        /// </summary>
+        /// <returns>
+        /// Индекс первого вхождения или -1, если вхождение не найдено.
+        /// </returns>
+        /// <param name="needle">Строка, вхождение которой нужно найти.</param>
+        /// <param name="haystack">Строка, в которой осуществляется поиск.</param>
         public static int FindFirstEntry(string needle, string haystack)
         {
 
@@ -70,6 +81,14 @@ namespace StringSearchingAlgorithms
             return -1;
         }
 
+        ///  <summary>
+        ///  Возвращает первое вхождение образца в строку, в которой осуществляется поиск.
+        ///  </summary>
+        ///  <returns>
+        ///  Индекс первого вхождения или -1, если вхождение не найдено.
+        ///  </returns>
+        ///  <param name = "needle" > Строка, вхождение которой нужно найти.</param>
+        ///  <param name = "haystack" > Строка, в которой осуществляется поиск.</param>
         public static IEnumerable<int> FindAllEntries(string needle, string haystack)
         {
             int n = haystack.Length;
