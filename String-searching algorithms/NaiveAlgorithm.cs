@@ -6,20 +6,12 @@ namespace StringSearchingAlgorithms
     /// <summary>
     /// Наивный алгоритм поиска.
     /// </summary>
-    public static class NaiveAlgorithm
+    public class NaiveAlgorithm : IStringSearchingAlgorithm
     {
-        ///  <summary>
-        ///  Возвращает первое вхождение образца в строку, в которой осуществляется поиск.
-        ///  </summary>
-        ///  <returns>
-        ///  Индекс первого вхождения или -1, если вхождение не найдено.
-        ///  </returns>
-        ///  <param name = "needle" > Строка, вхождение которой нужно найти.</param>
-        ///  <param name = "haystack" > Строка, в которой осуществляется поиск.</param>
-        public static int FindFirstEntry(string needle, string haystack)
+        ///  <see cref="IStringSearchingAlgorithm.GetFirstIndex(string, string)"/>     
+        public int GetFirstIndex(string pattern, string text)
         {
-
-            foreach (var element in FindAllEntries(needle, haystack))
+            foreach (var element in this.GetIndexes(pattern, text))
             {
                 return element;
             }
@@ -27,33 +19,25 @@ namespace StringSearchingAlgorithms
             return -1;
         }
 
-        ///  <summary>
-        ///  Возвращает все вхождения образца в строку, в которой осуществляется поиск.
-        ///  </summary>
-        ///  <returns>
-        ///  Индекс первого вхождения или -1, если вхождение не найдено.
-        ///  </returns>
-        ///  <param name = "needle" > Строка, вхождения которой нужно найти.</param>
-        ///  <param name = "haystack" > Строка, в которой осуществляется поиск.</param>
-        public static IEnumerable<int> FindAllEntries(string needle, string haystack)
+        ///  <see cref="IStringSearchingAlgorithm.GetIndexes(string, string)"/>
+        public IEnumerable<int> GetIndexes(string pattern, string text)
         {
-            int stop = haystack.Length - needle.Length + 1;
+            int stop = text.Length - pattern.Length + 1;
 
             for (int i = 0; i < stop; i++)
             {
                 int j = 0;
 
-                while ((j < needle.Length) && (needle[j] == haystack[i + j]))
+                while ((j < pattern.Length) && (pattern[j] == text[i + j]))
                 {
                     j++;
                 }
 
-                if (j == needle.Length)
+                if (j == pattern.Length)
                 {
                     yield return i;
                 }
             }
-
         }
-    }   
+    }
 }

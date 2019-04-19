@@ -11,7 +11,7 @@ namespace Console_App
         {
             int n = 200000000, l = 10;
             var haystack = DoRandomString(n);
-            var needle = DoRandomString(l);
+            var needle = DoRandomString(l);           
 
             //var haystack = "GCATCGCAGAGAGTATACAGTACG";
             //var needle = "GCAGAGAG";
@@ -21,13 +21,17 @@ namespace Console_App
 
             var watch = new Stopwatch();
 
+            var naive = new NaiveAlgorithm();
+            var kmp = new KnuthMorrisPrattAlgorithm();
+            var bm = new BoyerMooreAlgorithm();
+
             watch.Start();
-            Console.WriteLine($"NaiveAlgorithm-FindFirstEntry: {NaiveAlgorithm.FindFirstEntry(needle, haystack)}");
+            Console.WriteLine($"NaiveAlgorithm-FindFirstEntry: {naive.GetFirstIndex(needle, haystack)}");
             watch.Stop();
             Console.WriteLine($"ElapsedMilliseconds: {watch.ElapsedMilliseconds}");
 
             watch.Restart();
-            foreach (var value in NaiveAlgorithm.FindAllEntries(needle, haystack))
+            foreach (var value in naive.GetIndexes(needle, haystack))
             {
                 Console.Write($"{value} ");
             }
@@ -37,12 +41,12 @@ namespace Console_App
 
 
             watch.Restart();
-            Console.WriteLine($"KMP-FindFirstEntry: {KnuthMorrisPrattAlgorithm.FindFirstEntry(needle, haystack)}");
+            Console.WriteLine($"KMP-FindFirstEntry: {kmp.GetFirstIndex(needle, haystack)}");
             watch.Stop();
             Console.WriteLine($"ElapsedMilliseconds: {watch.ElapsedMilliseconds}");
 
             watch.Restart();
-            foreach (var value in KnuthMorrisPrattAlgorithm.FindAllEntries(needle, haystack))
+            foreach (var value in kmp.GetIndexes(needle, haystack))
             {
                 Console.Write($"{value} ");
             }
@@ -52,12 +56,12 @@ namespace Console_App
 
 
             watch.Restart();
-            Console.WriteLine($"BoyerMoore-FindFirstEntry: {BoyerMooreAlgorithm.FindFirstEntry(needle, haystack)}");
+            Console.WriteLine($"BoyerMoore-FindFirstEntry: {bm.GetFirstIndex(needle, haystack)}");
             watch.Stop();
             Console.WriteLine($"ElapsedMilliseconds: {watch.ElapsedMilliseconds}");
 
             watch.Restart();
-            foreach (var value in BoyerMooreAlgorithm.FindAllEntries(needle, haystack))
+            foreach (var value in bm.GetIndexes(needle, haystack))
             {
                 Console.Write($"{value} ");
             }

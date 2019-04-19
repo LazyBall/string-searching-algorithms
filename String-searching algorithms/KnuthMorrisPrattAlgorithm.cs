@@ -5,20 +5,13 @@ namespace StringSearchingAlgorithms
     /// <summary>
     /// Алгоритм Кнута — Морриса — Пратта (КМП-алгоритм).
     /// </summary>
-    public static class KnuthMorrisPrattAlgorithm
+    public class KnuthMorrisPrattAlgorithm : IStringSearchingAlgorithm
     {
-        /// <summary>
-        /// Ищет первое вхождение образца в данной строке.
-        /// </summary>
-        /// <returns>
-        /// Индекс первого вхождения или -1, если вхождение не найдено.
-        /// </returns>
-        /// <param name="needle">Строка, вхождение которой нужно найти.</param>
-        /// <param name="haystack">Строка, в которой осуществляется поиск.</param>
-        public static int FindFirstEntry(string needle, string haystack)
-        {
 
-            foreach (var element in FindAllEntries(needle, haystack))
+        /// <see cref="IStringSearchingAlgorithm.GetFirstIndex(string, string)"/>
+        public int GetFirstIndex(string pattern, string text)
+        {
+            foreach (var element in GetIndexes(pattern, text))
             {
                 return element;
             }
@@ -26,42 +19,30 @@ namespace StringSearchingAlgorithms
             return -1;
         }
 
-        ///  <summary>
-        ///  Возвращает все вхождения образца в строку, в которой осуществляется поиск.
-        ///  </summary>
-        ///  <returns>
-        ///  Индекс первого вхождения или -1, если вхождение не найдено.
-        ///  </returns>
-        ///  <param name = "needle" > Строка, вхождения которой нужно найти.</param>
-        ///  <param name = "haystack" > Строка, в которой осуществляется поиск.</param>
-        public static IEnumerable<int> FindAllEntries(string needle, string haystack)
+        /// <see cref="IStringSearchingAlgorithm.GetIndexes(string, string)"/>
+        public IEnumerable<int> GetIndexes(string pattern, string text)
         {
-            var pi = PrefixFunction.Compute(needle);
+            var pi = PrefixFunction.Compute(pattern);
             int j = 0;
 
-            for (int i = 0; i < haystack.Length; i++)
+            for (int i = 0; i < text.Length; i++)
             {
 
-                while ((j > 0) && (needle[j] != haystack[i]))
+                while ((j > 0) && (pattern[j] != text[i]))
                 {
                     j = pi[j - 1];
                 }
 
-                if (needle[j] == haystack[i])
+                if (pattern[j] == text[i])
                 {
                     j++;
-                    //if (j == needle.Length)
-                    //{
-                    //    yield return (i - j + 1);
-                    //    j = pi[j - 1];
-                    //    found = true;
-                    //}
                 }
-                if (j == needle.Length)
+                if (j == pattern.Length)
                 {
                     yield return (i - j + 1);
                     j = pi[j - 1];
                 }
+
             }
 
         }

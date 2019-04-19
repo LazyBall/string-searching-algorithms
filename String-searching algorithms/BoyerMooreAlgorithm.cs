@@ -6,8 +6,51 @@ namespace StringSearchingAlgorithms
     /// <summary>
     /// Алгоритм поиска строки Бойера — Мура.
     /// </summary>
-    public static class BoyerMooreAlgorithm
+    public class BoyerMooreAlgorithm :IStringSearchingAlgorithm
     {
+
+        /// <see cref="IStringSearchingAlgorithm.GetFirstIndex(string, string)"/>
+        public int GetFirstIndex(string pattern, string text)
+        {
+
+            foreach (var element in GetIndexes(pattern, text))
+            {
+                return element;
+            }
+
+            return -1;
+        }
+
+        ///  <see cref="IStringSearchingAlgorithm.GetIndexes(string, string)"/>
+        public IEnumerable<int> GetIndexes(string pattern, string text)
+        {
+            int n = text.Length;
+            int m = pattern.Length;
+            var lambda = ComputeLastOccurrenceFunction(pattern);
+            var gamma = ComputeGoodSuffixFunction(pattern);
+            int s = 0;
+
+            while (s < n - m + 1)
+            {
+                int j = m - 1;
+                while ((j > -1) && (pattern[j] == text[s + j]))
+                {
+                    j--;
+                }
+                if (j == -1)
+                {
+                    yield return s;
+                    s += gamma[0];
+                }
+                else
+                {
+                    int position = (lambda.TryGetValue(text[s + j], out int value)) ? value : (-1);
+                    s += Math.Max(gamma[j + 1], j - position);
+                }
+            }
+
+        }
+
         //Эвристика стоп-символа
         private static IReadOnlyDictionary<char, int> ComputeLastOccurrenceFunction(string str)
         {
@@ -61,63 +104,7 @@ namespace StringSearchingAlgorithms
 
             return gamma;
         }
-
-        /// <summary>
-        /// Ищет первое вхождение образца в данной строке.
-        /// </summary>
-        /// <returns>
-        /// Индекс первого вхождения или -1, если вхождение не найдено.
-        /// </returns>
-        /// <param name="needle">Строка, вхождение которой нужно найти.</param>
-        /// <param name="haystack">Строка, в которой осуществляется поиск.</param>
-        public static int FindFirstEntry(string needle, string haystack)
-        {
-
-            foreach (var element in FindAllEntries(needle, haystack))
-            {
-                return element;
-            }
-
-            return -1;
-        }
-
-        ///  <summary>
-        ///  Возвращает первое вхождение образца в строку, в которой осуществляется поиск.
-        ///  </summary>
-        ///  <returns>
-        ///  Индекс первого вхождения или -1, если вхождение не найдено.
-        ///  </returns>
-        ///  <param name = "needle" > Строка, вхождение которой нужно найти.</param>
-        ///  <param name = "haystack" > Строка, в которой осуществляется поиск.</param>
-        public static IEnumerable<int> FindAllEntries(string needle, string haystack)
-        {
-            int n = haystack.Length;
-            int m = needle.Length;
-            var lambda = ComputeLastOccurrenceFunction(needle);
-            var gamma = ComputeGoodSuffixFunction(needle);
-            int s = 0;
-
-            while (s < n - m + 1)
-            {
-                int j = m - 1;
-                while ((j > -1) && (needle[j] == haystack[s + j]))
-                {
-                    j--;
-                }
-                if (j == -1)
-                {
-                    yield return s;
-                    s += gamma[0];
-                }
-                else
-                {
-                    int position = (lambda.TryGetValue(haystack[s + j], out int value)) ? value : (-1);
-                    s += Math.Max(gamma[j + 1], j - position);
-                }
-            }
-
-        }
-
+       
         private static string ReverseString(string str)
         {
             char[] array = str.ToCharArray();

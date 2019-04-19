@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoyerMooreAlgorithm.cs" />
+    <Compile Include="IStringSearchingAlgorithm.cs" />
     <Compile Include="KnuthMorrisPrattAlgorithm.cs" />
     <Compile Include="NaiveAlgorithm.cs" />
     <Compile Include="PrefixFunction.cs" />
