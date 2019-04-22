@@ -8,10 +8,10 @@ namespace StringSearchingAlgorithms
     public class KnuthMorrisPrattAlgorithm : IStringSearchingAlgorithm
     {
 
-        /// <see cref="IStringSearchingAlgorithm.GetFirstIndex(string, string)"/>
-        public int GetFirstIndex(string pattern, string text)
+        /// <see cref="IStringSearchingAlgorithm.GetFirstEntry(string, string)"/>
+        public int GetFirstEntry(string pattern, string text)
         {
-            foreach (var element in GetIndexes(pattern, text))
+            foreach (var element in GetAllEntries(pattern, text))
             {
                 return element;
             }
@@ -19,8 +19,8 @@ namespace StringSearchingAlgorithms
             return -1;
         }
 
-        /// <see cref="IStringSearchingAlgorithm.GetIndexes(string, string)"/>
-        public IEnumerable<int> GetIndexes(string pattern, string text)
+        /// <see cref="IStringSearchingAlgorithm.GetAllEntries(string, string)"/>
+        public IEnumerable<int> GetAllEntries(string pattern, string text)
         {
             var pi = PrefixFunction.Compute(pattern);
             int j = 0;

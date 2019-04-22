@@ -8,10 +8,10 @@ namespace StringSearchingAlgorithms
     /// </summary>
     public class NaiveAlgorithm : IStringSearchingAlgorithm
     {
-        ///  <see cref="IStringSearchingAlgorithm.GetFirstIndex(string, string)"/>     
-        public int GetFirstIndex(string pattern, string text)
+
+        public int GetFirstEntry(string pattern, string text)
         {
-            foreach (var element in this.GetIndexes(pattern, text))
+            foreach (var element in this.GetAllEntries(pattern, text))
             {
                 return element;
             }
@@ -19,8 +19,7 @@ namespace StringSearchingAlgorithms
             return -1;
         }
 
-        ///  <see cref="IStringSearchingAlgorithm.GetIndexes(string, string)"/>
-        public IEnumerable<int> GetIndexes(string pattern, string text)
+        public IEnumerable<int> GetAllEntries(string pattern, string text)
         {
             int stop = text.Length - pattern.Length + 1;
 

@@ -16,7 +16,7 @@ namespace StringSearchingAlgorithms
         ///  </returns>
         ///  <param name = "pattern" > Строка, вхождения которой нужно найти.</param>
         ///  <param name = "text" > Строка, в которой осуществляется поиск.</param>
-        IEnumerable<int> GetIndexes(string pattern, string text);
+        IEnumerable<int> GetAllEntries(string pattern, string text);
 
         ///  <summary>
         ///  Возвращает первое вхождение образца в строку, в которой осуществляется поиск.
@@ -26,7 +26,7 @@ namespace StringSearchingAlgorithms
         ///  </returns>
         ///  <param name = "pattern" > Строка, вхождение которой нужно найти.</param>
         ///  <param name = "text" > Строка, в которой осуществляется поиск.</param>
-        int GetFirstIndex(string pattern, string text);
+        int GetFirstEntry(string pattern, string text);
 
     }
 }

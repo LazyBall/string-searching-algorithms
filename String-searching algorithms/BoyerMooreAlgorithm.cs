@@ -9,11 +9,11 @@ namespace StringSearchingAlgorithms
     public class BoyerMooreAlgorithm :IStringSearchingAlgorithm
     {
 
-        /// <see cref="IStringSearchingAlgorithm.GetFirstIndex(string, string)"/>
-        public int GetFirstIndex(string pattern, string text)
+        /// <see cref="IStringSearchingAlgorithm.GetFirstEntry(string, string)"/>
+        public int GetFirstEntry(string pattern, string text)
         {
 
-            foreach (var element in GetIndexes(pattern, text))
+            foreach (var element in GetAllEntries(pattern, text))
             {
                 return element;
             }
@@ -21,8 +21,8 @@ namespace StringSearchingAlgorithms
             return -1;
         }
 
-        ///  <see cref="IStringSearchingAlgorithm.GetIndexes(string, string)"/>
-        public IEnumerable<int> GetIndexes(string pattern, string text)
+        ///  <see cref="IStringSearchingAlgorithm.GetAllEntries(string, string)"/>
+        public IEnumerable<int> GetAllEntries(string pattern, string text)
         {
             int n = text.Length;
             int m = pattern.Length;
@@ -52,7 +52,7 @@ namespace StringSearchingAlgorithms
         }
 
         //Эвристика стоп-символа
-        private static IReadOnlyDictionary<char, int> ComputeLastOccurrenceFunction(string str)
+        private IReadOnlyDictionary<char, int> ComputeLastOccurrenceFunction(string str)
         {
             // Если алфавит маленький типа ASCII (256 символов) то можно сделать массив
             // var lambda=new int[256];
@@ -79,7 +79,7 @@ namespace StringSearchingAlgorithms
         }
 
         //Эвристика безопасного суффикса
-        private static int[] ComputeGoodSuffixFunction(string str)
+        private int[] ComputeGoodSuffixFunction(string str)
         {
             var pi = PrefixFunction.Compute(str);
             var piRev = PrefixFunction.Compute(ReverseString(str));
@@ -105,7 +105,7 @@ namespace StringSearchingAlgorithms
             return gamma;
         }
        
-        private static string ReverseString(string str)
+        private string ReverseString(string str)
         {
             char[] array = str.ToCharArray();
             Array.Reverse(array);
