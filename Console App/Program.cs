@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Text;
 using StringSearchingAlgorithms;
 using System.Linq;
+using System.IO;
+using System.Numerics;
 
 namespace Console_App
 {
@@ -11,8 +13,8 @@ namespace Console_App
     {
         static void Main()
         {
-            int n = 200000000, l = 45;
-            string haystack, needle;
+            //int n = 200000000, l = 45;
+            //string haystack, needle;
             //var haystack = DoRandomString(n);
             //var needle = DoRandomString(l);
 
@@ -29,53 +31,71 @@ namespace Console_App
                 new BoyerMooreAlgorithm(),
                 new RabinKarpAlgorithm()
             };
+            var rb = new RabinKarpAlgorithm();
 
-            var rb = new RabinKarpAlgorithm();            
-            
             var watch = new Stopwatch();
-            long res, res1;
-            res = res1 = 0;
+            var haystack = GenerateThueMorseSequence(27);
+            var needle = haystack.Substring(0, 113);
 
-            for (int j = 0; j < 10; j++)
+            foreach (var alg in list)
             {
-                haystack = DoRandomString(n);
-                needle = DoRandomString(l);
-                for (int i = 0; i < 5; i++)
-                {
-                    watch.Restart();
-                    Console.WriteLine(rb.GetAllEntries(needle, haystack).Count());
-                    watch.Stop();
-                    res += watch.ElapsedMilliseconds;
-                    Console.WriteLine(watch.ElapsedMilliseconds);
-                    watch.Restart();
-                    Console.WriteLine(rb.GetAllEntries1(needle, haystack).Count());
-                    Console.WriteLine(watch.ElapsedMilliseconds);
-                    watch.Stop();
-                    res1 += watch.ElapsedMilliseconds;
-                    Console.WriteLine();
-                }
+                watch.Restart();
+                Console.WriteLine(alg.GetFirstEntry(needle, haystack));
+                watch.Stop();
+                Console.WriteLine(watch.ElapsedMilliseconds);
+                watch.Restart();
+                Console.WriteLine(alg.GetAllEntries(needle, haystack).Count());
+                Console.WriteLine(watch.ElapsedMilliseconds);
+                Console.WriteLine();
             }
-
-            Console.WriteLine("Res:{0}, Res1:{1}", res, res1);
-
-            //foreach(var alg in list)
-            //{
-            //    Console.WriteLine(alg.GetFirstEntry(needle, haystack));
-            //    Console.WriteLine(alg.GetAllEntries(needle, haystack).Count());
-            //    Console.WriteLine();
-            //}           
         }
 
-        static string DoRandomString(int length)
+        static string DoRandomString(int length, int minValue = 0, int maxValue = char.MaxValue + 1)
         {
             var strBuilder = new StringBuilder(length);
             var random = new Random(DateTime.Now.Millisecond);
+
             for (int i = 0; i < length; i++)
             {
-                //strBuilder.Append((char)random.Next(char.MaxValue));
-                strBuilder.Append((char)random.Next(78, 80));
+                strBuilder.Append((char)random.Next(minValue, maxValue));
             }
+
             return strBuilder.ToString();
+        }
+
+        static string ReadFromFile(string fileName)
+        {
+            using (var inputFile = new StreamReader(fileName))
+            {
+                return inputFile.ReadToEnd();
+            }
+        }
+
+        static string GenerateThueMorseSequence(int depth)
+        {
+            var strBuilder = new StringBuilder(1 << depth);
+            strBuilder.Append('1');
+
+            for (int i = 0; i < depth; i++)
+            {
+                strBuilder.Append(Invert(strBuilder.ToString()));
+            }
+
+            return strBuilder.ToString();
+
+            string Invert(string str)
+            {
+                var builder = new StringBuilder(str.Length);
+
+                foreach(var symbol in str)
+                {
+                    if (symbol == '0') builder.Append('1');
+                    else builder.Append('0');
+                }
+
+                return builder.ToString();
+            }
+
         }
     }
 }

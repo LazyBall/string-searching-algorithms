@@ -44,7 +44,8 @@ namespace StringSearchingAlgorithms
             }
         }
        
-        public IEnumerable<int> GetAllEntries1(string pattern, string text)
+        //Более безопасный хэш, но медленнее в 2 раза
+        private IEnumerable<int> GetAllEntries1(string pattern, string text)
         {
             //int alphabetSize = (new Random().Next(1, char.MaxValue + 2)); //Вики
             int alphabetSize = char.MaxValue + 1; //размер алфавита, как в Кормене
