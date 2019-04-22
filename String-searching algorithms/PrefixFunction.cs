@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace StringSearchingAlgorithms
 {
     static class PrefixFunction
@@ -22,6 +23,24 @@ namespace StringSearchingAlgorithms
                     k++;
                 }
                 pi[q] = k;
+            }
+
+            return pi;
+        }
+
+        public static int[] BuildFromZFunction(int[] z)
+        {
+            var pi = new int[z.Length];
+
+            for (int i = 1; i < z.Length; i++)
+            {
+
+                for (int j = z[i] - 1; j >= 0; j--)
+                {
+                    if (pi[i + j] > 0) break;
+                    else pi[i + j] = j + 1;
+                }
+
             }
 
             return pi;

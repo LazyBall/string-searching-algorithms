@@ -6,10 +6,9 @@ namespace StringSearchingAlgorithms
     /// <summary>
     /// Алгоритм поиска строки Бойера — Мура.
     /// </summary>
-    public class BoyerMooreAlgorithm :IStringSearchingAlgorithm
+    public class BoyerMooreAlgorithm : IStringSearchingAlgorithm
     {
 
-        /// <see cref="IStringSearchingAlgorithm.GetFirstEntry(string, string)"/>
         public int GetFirstEntry(string pattern, string text)
         {
 
@@ -21,7 +20,6 @@ namespace StringSearchingAlgorithms
             return -1;
         }
 
-        ///  <see cref="IStringSearchingAlgorithm.GetAllEntries(string, string)"/>
         public IEnumerable<int> GetAllEntries(string pattern, string text)
         {
             int n = text.Length;
@@ -104,7 +102,7 @@ namespace StringSearchingAlgorithms
 
             return gamma;
         }
-       
+
         private string ReverseString(string str)
         {
             char[] array = str.ToCharArray();
