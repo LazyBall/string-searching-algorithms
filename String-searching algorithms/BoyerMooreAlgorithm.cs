@@ -12,7 +12,7 @@ namespace StringSearchingAlgorithms
         public int GetFirstEntry(string pattern, string text)
         {
 
-            foreach (var element in GetAllEntries(pattern, text))
+            foreach (var element in this.GetAllEntries(pattern, text))
             {
                 return element;
             }
@@ -22,15 +22,14 @@ namespace StringSearchingAlgorithms
 
         public IEnumerable<int> GetAllEntries(string pattern, string text)
         {
-            int n = text.Length;
-            int m = pattern.Length;
             var lambda = ComputeLastOccurrenceFunction(pattern);
-            var gamma = ComputeGoodSuffixFunction(pattern);
+            var gamma = ComputeGoodSuffixFunction(pattern);           
+            int stop = text.Length - pattern.Length + 1;
             int s = 0;
 
-            while (s < n - m + 1)
+            while (s < stop)
             {
-                int j = m - 1;
+                int j = pattern.Length - 1;
                 while ((j > -1) && (pattern[j] == text[s + j]))
                 {
                     j--;
@@ -55,7 +54,7 @@ namespace StringSearchingAlgorithms
             // Если алфавит маленький типа ASCII (256 символов) то можно сделать массив
             // var lambda=new int[256];
             // и для каждого символа lambda[(byte)symbol]=i; , где i-самая правая позиция в строке
-            // кроме последнего символа (это изменение поможет в алгоритме Хорспула)
+            // кроме последнего символа (это изменение важно в алгоритме Хорспула)
             // В случае большого алфавита лучше использовать Dictionary
             var lambda = new Dictionary<char, int>();
             int m = str.Length - 1;
@@ -76,24 +75,23 @@ namespace StringSearchingAlgorithms
             return lambda;
         }
 
-        //Эвристика безопасного суффикса
+        //Эвристика хорошего суффикса
         private int[] ComputeGoodSuffixFunction(string str)
         {
             var pi = PrefixFunction.Compute(str);
             var piRev = PrefixFunction.Compute(ReverseString(str));
-            int m = str.Length;
-            int[] gamma = new int[m + 1];
+            int[] gamma = new int[str.Length + 1];
             // В массивах pi и piRev относительно Кормена индексы начинаются с нуля
             // при этом в gamma нумерация идет как и в книге
 
-            for (int j = 0; j < m + 1; j++)
+            for (int j = 0; j < gamma.Length; j++)
             {
-                gamma[j] = m - pi[m - 1];
+                gamma[j] = str.Length - pi[str.Length - 1];
             }
 
-            for (int l = 1; l < m + 1; l++)
+            for (int l = 1; l < gamma.Length; l++)
             {
-                int j = m - piRev[l - 1];
+                int j = str.Length - piRev[l - 1];
                 if (gamma[j] > l - piRev[l - 1])
                 {
                     gamma[j] = l - piRev[l - 1];

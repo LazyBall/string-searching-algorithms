@@ -1,11 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace StringSearchingAlgorithms
 {
     public class RabinKarpAlgorithm : IStringSearchingAlgorithm
     {
-        //source http://www-igm.univ-mlv.fr/~lecroq/string/node5.html#SECTION0050        
+
+        public int GetFirstEntry(string pattern, string text)
+        {
+            foreach (var entry in this.GetAllEntries(pattern, text))
+            {
+                return entry;
+            }
+
+            return -1;
+        }
+
         public IEnumerable<int> GetAllEntries(string pattern, string text)
         {
             uint factor = 1; 
@@ -85,16 +94,15 @@ namespace StringSearchingAlgorithms
             }
         }
 
-        public int GetFirstEntry(string pattern, string text)
-        {
-            foreach (var entry in GetAllEntries(pattern, text))
-            {
-                return entry;
-            }
 
-            return -1;
-        }
-
+        ///  <summary>
+        ///  Возвращает все вхождения набора образцов в строку, в которой осуществляется поиск.
+        ///  </summary>
+        ///  <returns>
+        ///  Перечисление пар индекс-образец. Возвращаемые значения не упорядочены по индексу.
+        ///  </returns>
+        ///  <param name = "patterns" > Образцы, вхождения которых нужно найти.</param>
+        ///  <param name = "text" > Строка, в которой осуществляется поиск.</param>
         //алгоритм Рабина-Карпа позволяет вести поиск сразу нескольких паттернов
         public IEnumerable<KeyValuePair<int, string>> GetIndexes(IEnumerable<string> patterns, string text)
         {
@@ -116,6 +124,7 @@ namespace StringSearchingAlgorithms
 
         }
 
+        //set patterns содержит строки одной длины
         private IEnumerable<KeyValuePair<int, string>> IndexOfAny(HashSet<string> patterns, string text)
         {
             var dictionary = new Dictionary<uint, List<string>>(patterns.Count);
@@ -131,7 +140,12 @@ namespace StringSearchingAlgorithms
 
             uint hashText = GetHash(text, 0, patternLength);
             int stop = text.Length - patternLength;
-            var factor = CreateFactor(patternLength - 1);
+
+            uint factor = 1;
+            for (int i = 0; i < patternLength; i++)
+            {
+                factor <<= 1;
+            }
 
             for (int i = 0; i < stop; i++)
             {
@@ -172,18 +186,6 @@ namespace StringSearchingAlgorithms
             }
 
             return hashText;
-        }
-
-        private uint CreateFactor(int length)
-        {
-            uint factor = 1;
-
-            for (int i = 0; i < length; i++)
-            {
-                factor <<= 1;
-            }
-
-            return factor;
         }
     }
 }

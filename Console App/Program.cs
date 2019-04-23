@@ -5,7 +5,6 @@ using System.Text;
 using StringSearchingAlgorithms;
 using System.Linq;
 using System.IO;
-using System.Numerics;
 
 namespace Console_App
 {
@@ -31,23 +30,24 @@ namespace Console_App
                 new BoyerMooreAlgorithm(),
                 new RabinKarpAlgorithm()
             };
-            var rb = new RabinKarpAlgorithm();
 
-            var watch = new Stopwatch();
-            var haystack = GenerateThueMorseSequence(27);
-            var needle = haystack.Substring(0, 113);
+           
 
-            foreach (var alg in list)
-            {
-                watch.Restart();
-                Console.WriteLine(alg.GetFirstEntry(needle, haystack));
-                watch.Stop();
-                Console.WriteLine(watch.ElapsedMilliseconds);
-                watch.Restart();
-                Console.WriteLine(alg.GetAllEntries(needle, haystack).Count());
-                Console.WriteLine(watch.ElapsedMilliseconds);
-                Console.WriteLine();
-            }
+            //var watch = new Stopwatch();
+            //var haystack = GenerateThueMorseSequence(27);
+            //var needle = haystack.Substring(0, 113);
+
+            //foreach (var alg in list)
+            //{
+            //    watch.Restart();
+            //    Console.WriteLine(alg.GetFirstEntry(needle, haystack));
+            //    watch.Stop();
+            //    Console.WriteLine(watch.ElapsedMilliseconds);
+            //    watch.Restart();
+            //    Console.WriteLine(alg.GetAllEntries(needle, haystack).Count());
+            //    Console.WriteLine(watch.ElapsedMilliseconds);
+            //    Console.WriteLine();
+            //}
         }
 
         static string DoRandomString(int length, int minValue = 0, int maxValue = char.MaxValue + 1)
