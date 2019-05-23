@@ -81,8 +81,8 @@ namespace Console_App
                     case BoyerMooreAlgorithm bm:
                         CreateReport(FindAll(text, set, bm), nameText + "BoyerFindAll.txt");
                         break;
-                    case RabinKarpAlgorithm rabin:
-                        CreateReport(FindAll(text, set, rabin), nameText + "RabinFindAll.txt");
+                    //case RabinKarpAlgorithm rabin:
+                    //    CreateReport(FindAll(text, set, rabin), nameText + "RabinFindAll.txt");
                         break;
                 }
             }
@@ -93,13 +93,13 @@ namespace Console_App
         {
             int n = words.Count();
             var watch = new Stopwatch();
-            if(algorithm is RabinKarpAlgorithm rabin)
-            {
-                watch.Restart();
-                rabin.GetIndexes(words, text).Count();
-                watch.Stop();
-            }
-            else
+            //if(algorithm is RabinKarpAlgorithm rabin)
+            //{
+            //    watch.Restart();
+            //    rabin.GetIndexes(words, text).Count();
+            //    watch.Stop();
+            //}
+            //else
             {
                 watch.Restart();
                 foreach(var word in words)
