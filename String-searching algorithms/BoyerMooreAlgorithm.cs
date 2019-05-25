@@ -14,7 +14,7 @@ namespace StringSearchingAlgorithms
         {
             // Если алфавит маленький типа ASCII (256 символов) то можно сделать массив
             // var lambda=new int[256];
-            // и для каждого символа lambda[(byte)symbol]=i; , где i-самая правая позиция в строке
+            // и для каждого символа lambda[(int)symbol]=i; , где i-самая правая позиция в строке
             // кроме последнего символа (это изменение важно в алгоритме Хорспула)
             // В случае большого алфавита лучше использовать Dictionary
             var lambda = new Dictionary<char, int>();
@@ -43,7 +43,7 @@ namespace StringSearchingAlgorithms
         {
             var pi = PrefixFunction.Compute(str);
             var piRev = PrefixFunction.Compute(ReverseString(str));
-            var gamma = new int[str.Length + 1];
+            var gamma = new int[(long)str.Length + 1];
             // В массивах pi и piRev относительно Кормена индексы начинаются с нуля
             // при этом в gamma нумерация идет как и в книге
 
@@ -97,25 +97,26 @@ namespace StringSearchingAlgorithms
             }
             var lambda = ComputeLastOccurrenceFunction(pattern);
             var gamma = ComputeGoodSuffixFunction(pattern);
-            int stop = text.Length - pattern.Length + 1;
-            int s = 0;
+            int stop = text.Length - pattern.Length;
+            int currentShift = 0;
 
-            while (s < stop)
+            while (currentShift <= stop)
             {
                 int j = pattern.Length - 1;
-                while ((j > -1) && (pattern[j] == text[s + j]))
+                while ((j > -1) && (pattern[j] == text[currentShift + j]))
                 {
                     j--;
                 }
                 if (j == -1)
                 {
-                    yield return s;
-                    s += gamma[0];
+                    yield return currentShift;
+                    currentShift += gamma[0];
                 }
                 else
                 {
-                    int position = (lambda.TryGetValue(text[s + j], out int value)) ? value : (-1);
-                    s += Math.Max(gamma[j + 1], j - position);
+                    var rightmostPosition = (lambda.TryGetValue(text[currentShift + j], out int value)) ?
+                        value : (-1);
+                    currentShift += Math.Max(gamma[j + 1], j - rightmostPosition);
                 }
             }
 

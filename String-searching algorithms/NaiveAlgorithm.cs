@@ -30,9 +30,9 @@ namespace StringSearchingAlgorithms
             {
                 throw new ArgumentNullException("pattern is null.");
             }            
-            int stop = text.Length - pattern.Length + 1;
+            int stop = text.Length - pattern.Length;
 
-            for (int i = 0; i < stop; i++)
+            for (int i = 0; i <= stop; i++)
             {
                 int j = 0;
 
