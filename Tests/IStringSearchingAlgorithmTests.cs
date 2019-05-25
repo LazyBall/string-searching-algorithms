@@ -11,7 +11,7 @@ namespace Tests
 
         private string ReadFromFile(string fileName)
         {
-            using (var inputFile = new StreamReader(fileName))
+            using (var inputFile = new StreamReader(fileName, Encoding.Default))
             {
                 return inputFile.ReadToEnd();
             }
@@ -46,7 +46,7 @@ namespace Tests
             var flag = false;
             try
             {
-                new T().GetAllEntries("abc", null);
+                new T().GetAllEntries("abc", null).Count();
             }
             catch
             {
@@ -60,7 +60,7 @@ namespace Tests
             var flag = false;
             try
             {
-                new T().GetAllEntries(null, "abc");
+                new T().GetAllEntries(null, "abc").Count();
             }
             catch
             {
@@ -88,6 +88,11 @@ namespace Tests
 
             flag = flag && (i == text.Length);
             return flag;
+        }
+
+        public bool TestGetAllEntriesWhenPatternIsNotSubstring()
+        {
+            return (new T().GetAllEntries("abcd", "efghrthyt").Count() == 0);
         }
 
         public bool TestGetFirstEntryWhenTextIsNull()
@@ -135,6 +140,7 @@ namespace Tests
             var pattern = "abr";
             var flag = true;
             var expected = new List<int>() { 0, 7 }.GetEnumerator();
+            expected.MoveNext();
 
             foreach (var index in new T().GetAllEntries(pattern, text))
             {
@@ -150,12 +156,7 @@ namespace Tests
             var text = "bracadabra";
             var pattern = "abr";
             return (6 == new T().GetFirstEntry(pattern, text));
-        }
-
-        public bool TestGetAllEntriesWhenPatternIsNotSubstring()
-        {
-            return (new T().GetAllEntries("abcd", "efghrthyt").Count() == 0);
-        }
+        }      
 
         public bool TestGetFirstEntryWhenPatternIsNotSubstring()
         {
@@ -165,13 +166,15 @@ namespace Tests
         public bool TestGetAllEntriesOnFile()
         {
             var text = ReadFromFile("WarAndPeace.txt");
+            text = text.Substring(text.Length - text.Length / 100);
             var flag = true;
+            var algorithm = new T();
 
             foreach (var word in DoWords(text))
             {
                 int i = 0;
 
-                foreach (var index in new T().GetAllEntries(word, text))
+                foreach (var index in algorithm.GetAllEntries(word, text))
                 {
                     flag = flag && (index == text.IndexOf(word, i));
                     i = index + 1;
@@ -185,11 +188,13 @@ namespace Tests
         public bool TestGetFirstEntryOnFile()
         {
             var text = ReadFromFile("WarAndPeace.txt");
+            text = text.Substring(text.Length - text.Length / 100);
+            var algorithm = new T();
             var flag = true;
 
             foreach (var word in DoWords(text))
             {
-                flag = flag && (new T().GetFirstEntry(word, text) == text.IndexOf(word));
+                flag = flag && (algorithm.GetFirstEntry(word, text) == text.IndexOf(word));
             }
 
             return flag;
