@@ -95,6 +95,51 @@ namespace Tests
             return (new T().GetAllEntries("abcd", "efghrthyt").Count() == 0);
         }
 
+        public bool TestGetAllEntriesOnFile()
+        {
+            var text = ReadFromFile("WarAndPeace.txt");
+            text = text.Substring(text.Length - text.Length / 100);
+            var flag = true;
+            var algorithm = new T();
+
+            foreach (var word in DoWords(text))
+            {
+                int i = 0;
+
+                foreach (var index in algorithm.GetAllEntries(word, text))
+                {
+                    flag = flag && (index == text.IndexOf(word, i));
+                    i = index + 1;
+                }
+
+            }
+
+            return flag;
+        }
+
+        public bool TestGetAllEntriesWhenPatternEqualsText()
+        {
+            int count = 0, position = -1;
+
+            foreach(var index in new T().GetAllEntries("abcde", "abcde"))
+            {
+                position = index;
+                count++;
+            }
+
+            return (position == 0) && (count == 1);
+        }
+
+        public bool TestGetAllEntriesWhenPatternLongerThanText()
+        {
+            return (new T().GetAllEntries("abcde", "ab").Count() == 0);
+        }
+
+        public bool TestGetAllEntriesWhenLengthPatternEqualLengthTextButPatternNotEqualText()
+        {
+            return (new T().GetAllEntries("abcde", "fghre").Count() == 0);
+        }
+
         public bool TestGetFirstEntryWhenTextIsNull()
         {
             var flag = false;
@@ -163,28 +208,6 @@ namespace Tests
             return (new T().GetFirstEntry("abcd", "efghrthyt") == -1);
         }
 
-        public bool TestGetAllEntriesOnFile()
-        {
-            var text = ReadFromFile("WarAndPeace.txt");
-            text = text.Substring(text.Length - text.Length / 100);
-            var flag = true;
-            var algorithm = new T();
-
-            foreach (var word in DoWords(text))
-            {
-                int i = 0;
-
-                foreach (var index in algorithm.GetAllEntries(word, text))
-                {
-                    flag = flag && (index == text.IndexOf(word, i));
-                    i = index + 1;
-                }
-
-            }
-
-            return flag;
-        }
-
         public bool TestGetFirstEntryOnFile()
         {
             var text = ReadFromFile("WarAndPeace.txt");
@@ -198,6 +221,21 @@ namespace Tests
             }
 
             return flag;
+        }
+
+        public bool TestGetFirstEntryWhenPatternEqualsText()
+        {
+            return (new T().GetFirstEntry("abcde", "abcde") == 0);
+        }
+
+        public bool TestGetFirstEntryWhenPatternLongerThanText()
+        {
+            return (new T().GetFirstEntry("abcde", "ab") == -1);
+        }
+
+        public bool TestGetFirstEntryWhenLengthPatternEqualLengthTextButPatternNotEqualText()
+        {
+            return (new T().GetFirstEntry("abcde", "fghre") == -1);
         }
 
     }

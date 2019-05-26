@@ -53,6 +53,25 @@ namespace Tests
         }
 
         [TestMethod]
+        public void TestGetAllEntriesWhenPatternEqualsText()
+        {
+            Assert.AreEqual(true, _algorithmTests.TestGetAllEntriesWhenPatternEqualsText());
+        }
+
+        [TestMethod]
+        public void TestGetAllEntriesWhenPatternLongerThanText()
+        {
+            Assert.AreEqual(true, _algorithmTests.TestGetAllEntriesWhenPatternLongerThanText());
+        }
+
+        [TestMethod]
+        public void TestGetAllEntriesWhenLengthPatternEqualLengthTextButPatternNotEqualText()
+        {
+            Assert.AreEqual(true, _algorithmTests.
+                TestGetAllEntriesWhenLengthPatternEqualLengthTextButPatternNotEqualText());
+        }
+
+        [TestMethod]
         public void TestGetFirstEntryWhenPatternIsNull()
         {
             Assert.AreEqual(true, _algorithmTests.TestGetFirstEntryWhenPatternIsNull());
@@ -88,11 +107,29 @@ namespace Tests
             Assert.AreEqual(true, _algorithmTests.TestGetFirstEntryOnFile());
         }
 
-
         [TestMethod]
         public void EasyTestGetFirstEntry()
         {
             Assert.AreEqual(true, _algorithmTests.EasyTestGetFirstEntry());
+        }
+
+        [TestMethod]
+        public void TestGetFirstEntryWhenPatternEqualsText()
+        {
+            Assert.AreEqual(true, _algorithmTests.TestGetFirstEntryWhenPatternEqualsText());
+        }
+
+        [TestMethod]
+        public void TestGetFirstEntryWhenPatternLongerThanText()
+        {
+            Assert.AreEqual(true, _algorithmTests.TestGetFirstEntryWhenPatternLongerThanText());
+        }
+
+        [TestMethod]
+        public void TestGetFirstEntryWhenLengthPatternEqualLengthTextButPatternNotEqualText()
+        {
+            Assert.AreEqual(true, _algorithmTests.
+                TestGetFirstEntryWhenLengthPatternEqualLengthTextButPatternNotEqualText());
         }
 
     }
