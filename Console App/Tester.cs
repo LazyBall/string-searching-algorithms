@@ -75,6 +75,7 @@ namespace Console_App
             algorithm.GetFirstEntry(word, text);
             watch.Stop();
             result.GetFirstEntryTime = watch.ElapsedMilliseconds;
+            GC.Collect(2, GCCollectionMode.Forced, true);
             watch.Restart();
             algorithm.GetAllEntries(word, text).Count();
             watch.Stop();
@@ -88,11 +89,13 @@ namespace Console_App
             {
                 foreach (var record in (from t in statistics orderby t.Key select t))
                 {
-                    outputFile.WriteLine(string.Format($"WordLength: {record.Key}, \t" +
-                        $"AverageTime(GetFirstEntry): " +
-                        $"{record.Value.BenchmarkResult.GetFirstEntryTime / record.Value.NumberTests} ms, \t"+
-                        $"AverageTime(GetAllEntries): " +
-                        $"{record.Value.BenchmarkResult.GetAllEntriesTime / record.Value.NumberTests} ms"));
+                    var averageGetFirst = Math.Round((double)record.Value.BenchmarkResult.GetFirstEntryTime
+                        / record.Value.NumberTests, 0);
+                    var averageGetAll = Math.Round((double)record.Value.BenchmarkResult.GetAllEntriesTime
+                        / record.Value.NumberTests, 0);
+                    outputFile.WriteLine($"WordLength: {record.Key}, \t" +
+                        $"AverageTime(GetFirstEntry): {averageGetFirst} ms, \t" +
+                        $"AverageTime(GetAllEntries): {averageGetAll} ms");
                 }
             }
         }

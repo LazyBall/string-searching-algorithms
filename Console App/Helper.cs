@@ -36,6 +36,7 @@ namespace Console_App
         public static IEnumerable<string> DoWords(IEnumerable<char> text)
         {
             var strBuilder = new StringBuilder();
+
             foreach (var symbol in text)
             {
                 if (char.IsLetter(symbol))
@@ -51,6 +52,11 @@ namespace Console_App
                     }
                 }
             }
+
+            if (strBuilder.Length > 0)
+            {
+                yield return strBuilder.ToString();
+            }
         }
 
         public static string DoRandomString(int length, int minValue = char.MinValue,
@@ -65,7 +71,7 @@ namespace Console_App
             }
 
             return strBuilder.ToString();
-        }
+        }      
 
     }
 }

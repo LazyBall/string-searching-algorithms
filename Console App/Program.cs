@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using StringSearchingAlgorithms;
+using System.Text;
 
 namespace Console_App
 {
@@ -12,22 +13,32 @@ namespace Console_App
             {
                 new NaiveAlgorithm(),
                 new KnuthMorrisPrattAlgorithm(),
-                new BoyerMooreAlgorithm()               
+                new BoyerMooreAlgorithm()
             };
 
-            var text = Helper.DoRandomString(int.MaxValue);
-            Tester.RunTest(text, "Random", Helper.GenerateSubstrings(text, 10, text.Length),
+            string text = string.Empty;
+
+            //Random Test
+            text = Helper.DoRandomString(int.MaxValue >> 12);
+            Tester.RunTest(text, "Random", Helper.GenerateSubstrings(text, 100, text.Length, 100, 5),
                 algorithms);
 
-            var tolkien = "TheLordOfTheRings.txt";
-            var tolstoy = "WarAndPeace.txt";
-            text = Helper.ReadFromFile(tolstoy);
-            Tester.RunTest(text, "Tolstoy", Helper.DoWords(text).
-                Concat(Helper.GenerateSubstrings(text, 0, text.Length)), algorithms);
+            //Russian test
+            text = Helper.ReadFromFile("Russian.txt");
+            Tester.RunTest(text, "Russian", Helper.GenerateSubstrings(text, 10, 1000,
+                numberWordsOneLength: 50), algorithms);
 
-            text = Helper.ReadFromFile(tolkien);
-            Tester.RunTest(text, "Tolkien", Helper.DoWords(text).
-                Concat(Helper.GenerateSubstrings(text, 0, text.Length)), algorithms);
-        }      
+            //English test
+            text = Helper.ReadFromFile("English.txt");
+            Tester.RunTest(text, "English", Helper.GenerateSubstrings(text, 10, 1000,
+               numberWordsOneLength: 50), algorithms);
+
+            //a..a test
+            text = new StringBuilder().Append('a', 10000).ToString();
+            Tester.RunTest(text, "NA", Helper.GenerateSubstrings(text, 100, 10000, 100, 5), algorithms);
+
+            Console.WriteLine("Completed!");
+            Console.ReadKey();
+        }
     }
 }
